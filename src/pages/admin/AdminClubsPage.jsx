@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../api";
 import NavBotonera from "../../components/NavBotonera";
+import "../../responsive.css"; 
 
 export default function AdminClubsPage() {
   const [clubs, setClubs] = useState([]);
@@ -29,10 +30,19 @@ export default function AdminClubsPage() {
     }
   };
 
-  useEffect(() => { cargar(); }, []);
+  useEffect(() => {
+    cargar();
+  }, []);
 
   const resetForm = () =>
-    setForm({ id: null, nombre: "", direccion: "", telefono: "", lat: "", lng: "" });
+    setForm({
+      id: null,
+      nombre: "",
+      direccion: "",
+      telefono: "",
+      lat: "",
+      lng: "",
+    });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -89,18 +99,10 @@ export default function AdminClubsPage() {
   };
 
   return (
-    <div style={{ maxWidth: 900, margin: "24px auto", paddingBottom: 80 }}>
+    <div className="admin-wrapper">
       <h2>Administración · Clubs</h2>
 
-      <form
-        onSubmit={onSubmit}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr auto",
-          gap: 8,
-          margin: "16px 0",
-        }}
-      >
+      <form onSubmit={onSubmit} className="form-grid-clubs">
         <input
           placeholder="Nombre *"
           value={form.nombre}
@@ -146,57 +148,57 @@ export default function AdminClubsPage() {
       {loading ? (
         <p>Cargando…</p>
       ) : Array.isArray(clubs) && clubs.length ? (
-        <table
-          width="100%"
-          border="1"
-          cellPadding="6"
-          style={{ borderCollapse: "collapse" }}
-        >
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Dirección</th>
-              <th>Teléfono</th>
-              <th>Lat</th>
-              <th>Lng</th>
-              <th style={{ width: 210 }}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clubs.map((c) => (
-              <tr key={c.id}>
-                <td>{c.id}</td>
-                <td>{c.nombre}</td>
-                <td>{c.direccion ?? "-"}</td>
-                <td>{c.telefono ?? "-"}</td>
-                <td>{c.lat ?? "-"}</td>
-                <td>{c.lng ?? "-"}</td>
-                <td>
-                  <button onClick={() => editar(c)} style={{ marginRight: 8 }}>
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => eliminar(c.id)}
-                    style={{ background: "#ffecec", color: "#b00020" }}
-                  >
-                    Eliminar
-                  </button>
-                </td>
+        <div className="table-wrapper">
+          <table border="1" cellPadding="6">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Lat</th>
+                <th>Lng</th>
+                <th style={{ width: 210 }}>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {clubs.map((c) => (
+                <tr key={c.id}>
+                  <td>{c.id}</td>
+                  <td>{c.nombre}</td>
+                  <td>{c.direccion ?? "-"}</td>
+                  <td>{c.telefono ?? "-"}</td>
+                  <td>{c.lat ?? "-"}</td>
+                  <td>{c.lng ?? "-"}</td>
+                  <td>
+                    <button
+                      onClick={() => editar(c)}
+                      style={{ marginRight: 8 }}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => eliminar(c.id)}
+                      style={{ background: "#ffecec", color: "#b00020" }}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>No hay clubs.</p>
       )}
 
-      {}
       <NavBotonera
+        className="nav-botonera-responsive"
         items={[
           { label: "Área Usuario", path: "/user" },
-          { label: "Área Admin",   path: "/admin" },
-          { label: "Crear Pista",  path: "/admin/pistas" },
+          { label: "Área Admin", path: "/admin" },
+          { label: "Crear Pista", path: "/admin/pistas" },
         ]}
       />
     </div>
